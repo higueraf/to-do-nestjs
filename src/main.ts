@@ -12,6 +12,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
   app.useGlobalInterceptors(new TimeOutInterceptor());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.setGlobalPrefix('api/v1');
   await app.listen(port, () => {
     console.log('Server Running ... Listening Port:', port);
   });
