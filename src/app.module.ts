@@ -3,8 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmConfigService } from './common/services/typeorm.service';
+
 import { ApiModule } from './api/api.module';
+
 
 @Module({
   imports: [
@@ -12,8 +13,8 @@ import { ApiModule } from './api/api.module';
       envFilePath: ['.env.development'],
       isGlobal: true,
     }),
-    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
-    ApiModule,
+
+    ApiModule
   ],
   controllers: [AppController],
   providers: [AppService],

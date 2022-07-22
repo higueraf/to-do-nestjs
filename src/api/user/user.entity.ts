@@ -20,6 +20,9 @@ export class User {
   @Column({ type: 'varchar', length: 120 })
   password: string;
 
+  @Column({ type: 'boolean', nullable: false, default: false })
+  isAdmin: boolean;
+
   @CreateDateColumn({ type: 'timestamp' })
   public createdAt!: Date;
 
