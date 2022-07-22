@@ -8,7 +8,7 @@ import { TimeOutInterceptor } from './common/interceptors/timeout.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config: ConfigService = app.get(ConfigService);
-  const port: number = config.get<number>('PORT');
+  const port: number = config.get<number>('PORT') || 3000;
   app.useGlobalFilters(new AllExceptionFilter());
   app.useGlobalInterceptors(new TimeOutInterceptor());
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));

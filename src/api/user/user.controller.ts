@@ -1,3 +1,4 @@
+import { AuthGuard } from '@nestjs/passport';
 import {
   Body,
   Controller,
@@ -8,11 +9,18 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
+
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.user.dto';
 import { IUser } from './user.interface';
 import { UserService } from './user.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
+@ApiTags('users')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
   @Inject(UserService)
@@ -45,4 +53,6 @@ export class UserController {
   delete(@Param('id') id: string) {
     return this.service.delete(id);
   }
+
+  
 }
