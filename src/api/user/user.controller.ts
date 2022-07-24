@@ -1,4 +1,3 @@
-import { AuthGuard } from '@nestjs/passport';
 import {
   Body,
   Controller,
@@ -10,8 +9,8 @@ import {
   Post,
   Put,
   UseGuards,
-
 } from '@nestjs/common';
+
 import { CreateUserDto } from './dto/create.user.dto';
 import { IUser } from './user.interface';
 import { UserService } from './user.service';
@@ -53,6 +52,4 @@ export class UserController {
   delete(@Param('id') id: string) {
     return this.service.delete(id);
   }
-
-  
 }

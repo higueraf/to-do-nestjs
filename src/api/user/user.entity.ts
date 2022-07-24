@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { ToDo } from '../to-do/to-do.entity';
 
 @Entity()
 export class User {
@@ -22,6 +24,9 @@ export class User {
 
   @Column({ type: 'boolean', nullable: false, default: false })
   isAdmin: boolean;
+
+  @OneToMany(() => ToDo, (todo) => todo.user) // note: we will create author property in the Photo class below
+  todos: ToDo[];
 
   @CreateDateColumn({ type: 'timestamp' })
   public createdAt!: Date;

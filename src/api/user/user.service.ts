@@ -3,13 +3,12 @@ import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserDto } from './dto/create.user.dto';
-import { LoginUserDto } from './dto/user.login-dto';
+
 import { User } from './user.entity';
 import { IUser } from './user.interface';
 
 @Injectable()
 export class UserService {
-
   constructor(
     @Inject('USER_REPOSITORY')
     private repository: Repository<User>,
@@ -45,7 +44,7 @@ export class UserService {
       user.email = createUserDto.email;
       user.password = hash;
       user.isAdmin = createUserDto.isAdmin ? createUserDto.isAdmin : false;
-      let userCreated = await this.repository.save(user);
+      const userCreated = await this.repository.save(user);
       delete userCreated.password;
       return userCreated;
     } catch (error) {
@@ -61,7 +60,7 @@ export class UserService {
       user.email = createUserDto.email;
       user.password = hash;
       user.isAdmin = createUserDto.isAdmin ? createUserDto.isAdmin : false;
-      let userUpdated = await this.repository.save(user);
+      const userUpdated = await this.repository.save(user);
       delete userUpdated.password;
       return userUpdated;
     } catch (error) {
@@ -84,5 +83,4 @@ export class UserService {
   async findByEmail(email: string) {
     return await this.repository.findOneBy({ email: email });
   }
-  
 }

@@ -7,7 +7,6 @@ import { Inject } from '@nestjs/common/decorators';
 import { LoginUserDto } from '../user/dto/user.login-dto';
 import { CreateUserDto } from '../user/dto/create.user.dto';
 
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -19,13 +18,13 @@ export class AuthService {
   generateJWT(user: User) {
     const payload = {
       email: user.email,
-      sub: user.id
+      sub: user.id,
     };
     return this.jwtService.sign(payload, {
-        secret: process.env.JWT_SECRET
+      secret: process.env.JWT_SECRET,
     });
   }
-  
+
   comparePassword(newPassword: string, passwordHash: string): boolean {
     return bcrypt.compareSync(newPassword, passwordHash);
   }
@@ -36,13 +35,13 @@ export class AuthService {
       if (!this.comparePassword(password, findUser.password)) return null;
       return findUser;
     } catch (error) {
-      return(error);
+      return error;
     }
   }
 
   async login(loginUser: User): Promise<LoginUserDto> {
     const accessToken: string = this.generateJWT(loginUser);
-    return  {
+    return {
       user: {
         name: loginUser.name,
         email: loginUser.email,
