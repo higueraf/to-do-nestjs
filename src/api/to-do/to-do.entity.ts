@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../users/user.entity';
 
 export enum State {
   ACTIVE = 'active',
