@@ -3,41 +3,29 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
-  ParseIntPipe,
   Post,
+  ParseIntPipe,
   Put,
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { IToDo } from './to-do.interface';
-import { ToDoService } from './to-do.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateToDoDto } from './dto/create.to-do.dto';
+import { ToDo } from './to-do.entity';
+import { ToDoService } from './to-do.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CreateToDoDto } from '../to-do/dto/create.to-do.dto';
 
 @ApiTags('to-do')
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('to-do')
-export class ToDoController {
-  @Inject(ToDoService)
-  private readonly service: ToDoService;
-
-  @Get()
-  findAll(): Promise<IToDo[]> {
-    return this.service.findAll();
-  }
-
-  @Get(':id')
-  public getToDo(@Param('id', ParseIntPipe) id: number) {
-    return this.service.getToDo(id);
-  }
+export class ToDosController {
+  constructor(private readonly todoService: ToDoService) {}
 
   @Post()
-  public createToDo(@Request() req, @Body() createToDoDto: CreateToDoDto) {
-    return this.service.createToDo(createToDoDto, req.user.userId);
+  create(@Request() req, @Body() createToDoDto: CreateToDoDto): Promise<ToDo> {
+    return this.todoService.create(createToDoDto, req.user.userId);
   }
 
   @Put(':id')
@@ -45,12 +33,22 @@ export class ToDoController {
     @Param('id') id: number,
     @Body() createToDoDto: CreateToDoDto,
     @Request() req,
-  ): Promise<IToDo> {
-    return this.service.update(id, createToDoDto, req.user.userId);
+  ): Promise<ToDo> {
+    return this.todoService.update(id, createToDoDto, req.user.userId);
+  }
+
+  @Get()
+  findAll(@Request() req): Promise<ToDo[]> {
+    return this.todoService.findAll(req.user.id);
+  }
+
+  @Get(':id')
+  findOne(@Param('id', ParseIntPipe) id: number): Promise<ToDo> {
+    return this.todoService.findOne(id);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.service.delete(id);
+  remove(@Param('id') id: string): Promise<void> {
+    return this.todoService.remove(id);
   }
 }

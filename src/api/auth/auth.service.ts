@@ -1,21 +1,27 @@
-import { Injectable, forwardRef } from '@nestjs/common';
+import {
+  Injectable,
+  forwardRef,
+  UnauthorizedException,
+  HttpStatus,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'src/api/user/user.entity';
+import { User } from '../users/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UserService } from 'src/api/user/user.service';
+import { UsersService } from '../users/users.service';
 import { Inject } from '@nestjs/common/decorators';
-import { LoginUserDto } from '../user/dto/user.login-dto';
-import { CreateUserDto } from '../user/dto/create.user.dto';
+import { LoginUserDto } from '../users/dto/user.login.dto';
+import { CreateUserDto } from '../users/dto/create.user.dto';
+import { Http2ServerRequest } from 'http2';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(forwardRef(() => UserService))
-    private readonly userService: UserService,
+    @Inject(forwardRef(() => UsersService))
+    private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
-  generateJWT(user: User) {
+  generateJWT(user: any) {
     const payload = {
       email: user.email,
       sub: user.id,
@@ -29,17 +35,24 @@ export class AuthService {
     return bcrypt.compareSync(newPassword, passwordHash);
   }
 
-  async validateUser(email: string, password: string): Promise<User> {
+  async validateUser(email: string, password: string) {
     try {
       const findUser: User = await this.userService.findByEmail(email);
-      if (!this.comparePassword(password, findUser.password)) return null;
-      return findUser;
+      if (findUser === null) {
+        return null;
+      } else {
+        if (!this.comparePassword(password, findUser.password)) return null;
+        return findUser;
+      }
     } catch (error) {
       return error;
     }
   }
 
-  async login(loginUser: User): Promise<LoginUserDto> {
+  async login(loginUser: any): Promise<LoginUserDto> {
+    if (loginUser === null) {
+      throw new UnauthorizedException();
+    }
     const accessToken: string = this.generateJWT(loginUser);
     return {
       user: {
@@ -52,6 +65,6 @@ export class AuthService {
   }
 
   async register(createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
+    return this.userService.create(createUserDto);
   }
 }
