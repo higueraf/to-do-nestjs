@@ -39,7 +39,7 @@ export class ToDosController {
 
   @Get()
   findAll(@Request() req): Promise<ToDo[]> {
-    return this.todoService.findAll(req.user.id);
+    return this.todoService.findAll(req.user.userId);
   }
 
   @Get(':id')

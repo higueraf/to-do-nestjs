@@ -68,7 +68,6 @@ describe('User Service', () => {
         isAdmin: true,
         password: 'password1',
       });
-      console.log(result);
       expect(result).toEqual(oneUser);
     });
   });
@@ -86,7 +85,6 @@ describe('User Service', () => {
         isAdmin: true,
         password: 'password1',
       });
-      console.log(result);
       expect(result).toEqual(oneUser);
     });
   });

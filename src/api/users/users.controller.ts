@@ -28,7 +28,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  async update(
+  update(
     @Param('id') id: number,
     @Body() createUserDto: CreateUserDto,
   ): Promise<User> {
