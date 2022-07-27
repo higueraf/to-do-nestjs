@@ -4,7 +4,6 @@ import { ToDo, State } from './to-do.entity';
 import { ToDoService } from './to-do.service';
 import { Repository } from 'typeorm';
 import { User } from '../users/user.entity';
-import { createFind } from 'rxjs/internal/operators/find';
 
 const userArray = [
   {
