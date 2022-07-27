@@ -47,12 +47,12 @@ export class ToDoService {
   }
 
   async findAll(userId: number): Promise<ToDo[]> {
-    const user = await this.usersRepository.findOneBy({ id: userId });
-    return this.todosRepository.find({
-      where: {
-        user: user,
-      },
-    });
+    const todos = await this.todosRepository
+      .createQueryBuilder('to-do')
+      .where('to-do.userId = :userId', { userId: userId })
+      .orderBy('to-do.createdAt', 'DESC')
+      .getMany();
+    return todos;
   }
 
   findOne(id: number): Promise<ToDo> {

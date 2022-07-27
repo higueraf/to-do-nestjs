@@ -4,6 +4,7 @@ import { ToDo, State } from './to-do.entity';
 import { ToDoService } from './to-do.service';
 import { Repository } from 'typeorm';
 import { User } from '../users/user.entity';
+import { createFind } from 'rxjs/internal/operators/find';
 
 const userArray = [
   {
@@ -43,6 +44,16 @@ const oneToDo = {
   state: State.ACTIVE,
 };
 
+const oneToDoUdated = {
+  description: 'Example1 Updated description',
+  state: undefined,
+  user: {
+    name: 'name1',
+    email: 'name1@to-do.com',
+    isAdmin: true,
+    password: 'password1',
+  },
+};
 describe('User Service', () => {
   let service: ToDoService;
   let repository: Repository<ToDo>;
@@ -83,7 +94,7 @@ describe('User Service', () => {
   });
 
   describe('create()', () => {
-    it('should successfully insert a user', async () => {
+    it('should successfully insert a To-Do', async () => {
       const oneToDo = {
         description: 'Example1 description',
         state: State.ACTIVE,
@@ -101,34 +112,23 @@ describe('User Service', () => {
 
   describe('update()', () => {
     it('should successfully update a To-Do', async () => {
-      const oneToDo = {
-        escription: 'Example1 description',
-        state: State.ACTIVE,
-      };
       const result = await service.update(
         1,
         {
-          description: 'Example1 description',
+          description: 'Example1 Updated description',
           state: State.ACTIVE,
         },
         1,
       );
-      console.log(result);
-      expect(result).toEqual(oneToDo);
-    });
-  });
-
-  describe('findAll()', () => {
-    it('should return an array of todos', async () => {
-      const todos = await service.findAll(1);
-      expect(todos).toEqual(todoArray);
+      expect(result).toEqual(oneToDoUdated);
     });
   });
 
   describe('findOne()', () => {
     it('should get a single user', () => {
       const repoSpy = jest.spyOn(repository, 'findOneBy');
-      expect(service.findOne(1)).resolves.toEqual(oneUser);
+      const result = service.findOne(1);
+      expect(result).resolves.toEqual(oneToDoUdated);
       expect(repoSpy).toBeCalledWith({ id: 1 });
     });
   });
@@ -141,4 +141,16 @@ describe('User Service', () => {
       expect(retVal).toBeUndefined();
     });
   });
+
+  /*
+  error
+  .createQueryBuilder('to-do')
+
+  describe('findAll()', () => {
+    it('should return an array of todos', async () => {
+      const todos = await service.findAll(1);
+      expect(todos).toEqual(todoArray);
+    });
+  });
+  */
 });

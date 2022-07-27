@@ -74,6 +74,23 @@ describe('UsersController', () => {
       expect(usersService.create).toHaveBeenCalledWith(createUserDto);
     });
   });
+  /*
+  describe('update()', () => {
+    it('should update a user', async () => {
+      const oneUser: CreateUserDto = {
+        name: 'name1mod',
+        email: 'name1mod@to-do.com',
+        isAdmin: true,
+        password: 'password1',
+      };
+      const result = await usersController.update(1, oneUser);
+      expect(result).resolves.toEqual({
+        id: '1',
+        ...oneUser,
+      });
+      expect(usersService.create).toHaveBeenCalledWith(oneUser);
+    });
+  });*/
 
   describe('findAll()', () => {
     it('should find all users ', () => {

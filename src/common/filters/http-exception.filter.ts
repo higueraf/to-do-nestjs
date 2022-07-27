@@ -9,7 +9,6 @@ import {
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  
   private readonly logger = new Logger(AllExceptionFilter.name);
 
   catch(exception: any, host: ArgumentsHost) {

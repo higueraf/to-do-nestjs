@@ -33,6 +33,10 @@ export class UsersService {
     }
   }
 
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
   async update(id: number, createUserDto: CreateUserDto): Promise<User> {
     try {
       const user = await this.usersRepository.findOneBy({ id: id });
@@ -47,10 +51,6 @@ export class UsersService {
     } catch (error) {
       return error;
     }
-  }
-
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
   }
 
   findOne(id: number): Promise<User> {
